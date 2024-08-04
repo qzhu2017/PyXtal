@@ -491,7 +491,7 @@ class structure_from_ext:
             return display_molecules([self.ref_mol, self.molecule])
 
 
-def search_molecules_in_crystal(struc, tol=0.2, once=False, ignore_HH=True):
+def search_molecules_in_crystal(struc, tol=0.2, once=False, ignore_HH=True, max_bond_length=None):
     """
     Function to perform to find the molecule in a Pymatgen structure
 
@@ -500,6 +500,7 @@ def search_molecules_in_crystal(struc, tol=0.2, once=False, ignore_HH=True):
         tol: tolerance value to check the connectivity
         once: search only one molecule or all molecules
         ignore_HH: whether or not ignore the short H-H in checking molecule
+        max_bond_length: sets maximum bond length if bond length is missing in bond length database
 
     Returns:
         molecules: list of pymatgen molecules
@@ -539,7 +540,7 @@ def search_molecules_in_crystal(struc, tol=0.2, once=False, ignore_HH=True):
                                 sites_add.append(site1)
                                 ids_add.append(site1.index)
                         else:
-                            if d < bonds[key]:
+                            if d < bonds.get(key,max_bond_length):
                                 if pbc:
                                     site1.frac_coords += image
                                 sites_add.append(site1)
